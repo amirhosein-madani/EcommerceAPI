@@ -12,3 +12,25 @@ requests==2.32.3
 sqlparse==0.5.3
 typing_extensions==4.13.2
 urllib3==2.3.0
+
+# third party madules
+markdown       
+django-filter  
+drf-spectacular
+drf-spectacular[sidecar]
+djangorestframework-simplejwt
+django-cors-headers
+
+# refactoring and tests
+black
+flake8
+pytest
+pytest-django
+faker
+
+# background process and cache
+# celery
+# redis
+# django-celery-beat
+# django-celery-results
+# django-redis
