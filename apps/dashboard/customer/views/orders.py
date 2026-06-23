@@ -4,7 +4,7 @@ from django.views.generic import (
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
 from dashboard.permissions import HasCustomerAccessPermission
-from dashboard.customer.forms import *
+from dashboard.customer.forms import *  # noqa: F401
 from django.core.exceptions import FieldError
 from order.models import OrderModel, OrderStatusType
 

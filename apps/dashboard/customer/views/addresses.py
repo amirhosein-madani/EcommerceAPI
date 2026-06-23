@@ -1,12 +1,12 @@
-from django.views.generic import UpdateView, DeleteView, CreateView, ListView
+from django.views.generic import UpdateView, CreateView, ListView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from dashboard.permissions import HasCustomerAccessPermission
-
 from dashboard.customer.forms import *
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.core.exceptions import FieldError
+from django.contrib import messages
 from order.models import UserAddressModel
 
 
@@ -29,7 +29,6 @@ class CustomerAddressCreateView(
     LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, CreateView
 ):
     template_name = "dashboard/customer/addresses/address-create.html"
-
     form_class = UserAddressForm
     success_message = "ایجاد آدرس با موفقیت انجام شد"
 
@@ -53,7 +52,6 @@ class CustomerAddressEditView(
     LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, UpdateView
 ):
     template_name = "dashboard/customer/addresses/address-edit.html"
-
     form_class = UserAddressForm
     success_message = "ویرایش آدرس با موفقیت انجام شد"
 
@@ -70,9 +68,12 @@ class CustomerAddressDeleteView(
     LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, DeleteView
 ):
     template_name = "dashboard/customer/addresses/address-delete.html"
-
     success_url = reverse_lazy("dashboard:customer:address-list")
     success_message = "حذف آدرس با موفقیت انجام شد"
 
     def get_queryset(self):
         return UserAddressModel.objects.filter(user=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super().delete(request, *args, **kwargs)

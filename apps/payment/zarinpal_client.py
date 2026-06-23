@@ -9,7 +9,7 @@ def get_domain():
         from django.contrib.sites.models import Site
 
         return Site.objects.get_current().domain
-    except:
+    except:  # noqa: E722
         return "example.com"
 
 

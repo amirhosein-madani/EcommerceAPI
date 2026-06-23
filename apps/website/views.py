@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView
-from .models import *
+from .models import *  # noqa: F401
 from .forms import ContactForm, NewsLetterForm
 from django.contrib import messages
 from django.views.generic import CreateView
@@ -40,7 +40,7 @@ class SendContactView(CreateView):
         # handle unsuccessful form submission
         messages.error(
             self.request,
-            "مشکلی در ارسال فرم شما پیش آمد لطفا ورودی ها رو بررسی کنین و مجدد ارسال نمایید",
+            "مشکلی در ارسال فرم شما پیش آمد لطفا ورودی ها رو بررسی کنین و مجدد ارسال نمایید",  # noqa: E501
         )
         return redirect(self.request.META.get("HTTP_REFERER"))
 

@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from order.permissions import HasCustomerAccessPermission
 from order.models import UserAddressModel
 from order.forms import CheckOutForm
-from cart.models import CartModel, CartItemModel
+from cart.models import CartModel
 from order.models import OrderModel, OrderItemModel
 from django.urls import reverse_lazy
 from cart.cart import CartSession

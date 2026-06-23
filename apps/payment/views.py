@@ -11,7 +11,7 @@ from order.models import OrderModel, OrderStatusType
 class PaymentVerifyView(View):
     def get(self, request, *args, **kwargs):
         authority_id = request.GET.get("Authority")
-        status = request.GET.get("Status")
+        status = request.GET.get("Status")  # noqa: F841
 
         payment_obj = get_object_or_404(PaymentModel, authority_id=authority_id)
         order = OrderModel.objects.get(payment=payment_obj)

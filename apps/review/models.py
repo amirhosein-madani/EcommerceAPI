@@ -1,5 +1,4 @@
 from django.db import models
-from shop.models import ProductModel
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.dispatch import receiver
 from django.db.models.signals import post_save

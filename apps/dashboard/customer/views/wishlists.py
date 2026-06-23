@@ -5,7 +5,7 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin
 from dashboard.permissions import HasCustomerAccessPermission
 
-from dashboard.customer.forms import *
+from dashboard.customer.forms import *  # noqa: F401
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.core.exceptions import FieldError

@@ -1,6 +1,5 @@
 from django.views.generic import (
     UpdateView,
-    DeleteView,
     ListView,
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
