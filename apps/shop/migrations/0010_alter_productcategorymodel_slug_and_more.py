@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shop', '0009_alter_productimagemodel_product'),
+        ("shop", "0009_alter_productimagemodel_product"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='productcategorymodel',
-            name='slug',
+            model_name="productcategorymodel",
+            name="slug",
             field=models.SlugField(allow_unicode=True, unique=True),
         ),
         migrations.AlterField(
-            model_name='productmodel',
-            name='slug',
+            model_name="productmodel",
+            name="slug",
             field=models.SlugField(allow_unicode=True, unique=True),
         ),
     ]

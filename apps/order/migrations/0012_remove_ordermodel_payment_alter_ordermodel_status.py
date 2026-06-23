@@ -6,17 +6,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('order', '0011_ordermodel_payment_alter_ordermodel_status'),
+        ("order", "0011_ordermodel_payment_alter_ordermodel_status"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='ordermodel',
-            name='payment',
+            model_name="ordermodel",
+            name="payment",
         ),
         migrations.AlterField(
-            model_name='ordermodel',
-            name='status',
-            field=models.IntegerField(choices=[(1, 'در انتظار پرداخت'), (2, 'در حال پردازش'), (3, 'ارسال شده'), (4, 'تحویل شده'), (5, 'لغو شده')], default=1),
+            model_name="ordermodel",
+            name="status",
+            field=models.IntegerField(
+                choices=[
+                    (1, "در انتظار پرداخت"),
+                    (2, "در حال پردازش"),
+                    (3, "ارسال شده"),
+                    (4, "تحویل شده"),
+                    (5, "لغو شده"),
+                ],
+                default=1,
+            ),
         ),
     ]

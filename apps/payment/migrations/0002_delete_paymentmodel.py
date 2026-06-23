@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('order', '0012_remove_ordermodel_payment_alter_ordermodel_status'),
-        ('payment', '0001_initial'),
+        ("order", "0012_remove_ordermodel_payment_alter_ordermodel_status"),
+        ("payment", "0001_initial"),
     ]
 
     operations = [
         migrations.DeleteModel(
-            name='PaymentModel',
+            name="PaymentModel",
         ),
     ]

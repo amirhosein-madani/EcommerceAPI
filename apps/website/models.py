@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-
 # fetching user model
 User = get_user_model()
+
 
 # defining the status of items to be saved or released
 class ContactModel(models.Model):
@@ -18,7 +18,7 @@ class ContactModel(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-created_date']
+        ordering = ["-created_date"]
 
     def __str__(self):
         return self.full_name

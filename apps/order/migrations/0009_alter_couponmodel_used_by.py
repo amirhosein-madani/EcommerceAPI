@@ -8,13 +8,18 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('order', '0008_alter_orderitemmodel_order'),
+        ("order", "0008_alter_orderitemmodel_order"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='couponmodel',
-            name='used_by',
-            field=models.ManyToManyField(blank=True, null=True, related_name='coupon_users', to=settings.AUTH_USER_MODEL),
+            model_name="couponmodel",
+            name="used_by",
+            field=models.ManyToManyField(
+                blank=True,
+                null=True,
+                related_name="coupon_users",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

@@ -8,7 +8,7 @@ class HasCustomerAccessPermission(UserPassesTestMixin):
         if self.request.user.is_authenticated:
             return self.request.user.type == UserType.customer.value
         return False
-    
+
 
 class HasAdminAccessPermission(UserPassesTestMixin):
 
