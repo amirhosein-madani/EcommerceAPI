@@ -5,8 +5,7 @@ Django==5.2.15
 django-debug-toolbar==7.0.0
 idna==3.10
 pillow==12.2.0
-psycopg==3.3.4
-psycopg-binary==3.3.4
+
 python-decouple==3.8
 requests==2.32.3
 sqlparse==0.5.3
@@ -20,6 +19,11 @@ drf-spectacular
 drf-spectacular[sidecar]
 djangorestframework-simplejwt
 django-cors-headers
+
+
+# db
+psycopg==3.3.4
+psycopg-binary==3.3.4
 
 # refactoring and tests
 black
