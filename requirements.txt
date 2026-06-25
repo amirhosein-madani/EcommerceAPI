@@ -1,32 +1,32 @@
 # Core
-Django
-djangorestframework
-python-decouple
-Pillow
-requests
+Django==5.2.15
+djangorestframework==3.17.1
+python-decouple==3.8
+Pillow==12.2.0
+requests==2.32.3
 
 # API
-django-filter
-drf-spectacular
-drf-spectacular[sidecar]
-djangorestframework-simplejwt
-django-cors-headers
+django-filter==25.2
+drf-spectacular==0.29.0
+drf-spectacular[sidecar]==2026.6.1
+djangorestframework-simplejwt==5.5.1
+django-cors-headers==4.9.0
 
 # Database
-psycopg
-psycopg-binary
+psycopg==3.3.4
+psycopg-binary==3.3.4
 
 # Development
-django-debug-toolbar
+django-debug-toolbar==7.0.0
 
 # Formatting & Linting
-black
-flake8
+black==26.5.1
+flake8==7.3.0
 
 # Testing
-pytest
-pytest-django
-faker
+pytest==9.1.1
+pytest-django==4.12.0
+Faker==40.23.0
 
 # Background Tasks & Cache
 # celery
