@@ -1,14 +1,14 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import (
     ListView,
     DetailView,
 )
 
 
-from website.models import ContactModel
+from website.models import NewsLetter, ContactModel
 from django.contrib.auth.mixins import LoginRequiredMixin
 from dashboard.permissions import *
-from django.db.models import Q
+from django.db.models import F, Q
 from django.core import exceptions
 
 

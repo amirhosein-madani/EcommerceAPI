@@ -1,11 +1,18 @@
 from django.views.generic import (
+    UpdateView,
+    DeleteView,
+    CreateView,
     ListView,
     DetailView,
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
 from dashboard.permissions import HasAdminAccessPermission
-from dashboard.admin.forms import *  # noqa: F401
 
+from dashboard.admin.forms import *
+from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse_lazy
+from django.shortcuts import redirect
+from django.contrib import messages
 from django.core.exceptions import FieldError
 from order.models import OrderModel, OrderStatusType
 

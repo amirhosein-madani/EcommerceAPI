@@ -1,13 +1,16 @@
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import redirect
 from django.views.generic import (
     ListView,
     DeleteView,
 )
+
+
 from website.models import NewsLetter
 from django.contrib.auth.mixins import LoginRequiredMixin
 from dashboard.permissions import *
-from django.db.models import Q
+from django.db.models import F, Q
 from django.core import exceptions
 
 

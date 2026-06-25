@@ -1,11 +1,13 @@
-from django.urls import path
-from . import views
-
-app_name = "accounts"
+from django.urls import path, include
+from .views import *
 
 urlpatterns = [
-    # path('',include('django.contrib.auth.urls'))
-    path("login/", views.LoginView.as_view(), name="login"),
-    path("logout/", views.LogoutView.as_view(), name="logout"),
-    # path('register/',views.RegisterView.as_view(),name="register"),
+    path("login/", user_login, name="login"),
+    path("logout/", user_logout, name="logout"),
+    path("api/v1/", include("accounts.api.v1.urls")),
+    path("sent-email/", sent_email, name="sent_email"),
+    path("test-cache/", test_cache, name="test_cacging"),
+    path("cache/", test_cahing, name="test_cacging"),
+    # path('api/v2/' , include('djoser.urls')),
+    # path('api/v2/' , include('djoser.urls.jwt')),
 ]
