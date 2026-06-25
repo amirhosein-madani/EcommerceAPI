@@ -1,19 +1,23 @@
-
-
 services:
   db:
     image: postgres:15-alpine
     container_name: postgres_db
     restart: always
+    expose:
+      - 5432
+    ports:
+    - "5432:5432"
     env_file:
-        - .env
+      - ./envs/dev/.env
     volumes:
-        - postgres_data:/var/lib/postgresql/data
+      - ./data/postgres:/var/lib/postgresql/data
 
   backend:
-    build: .
+    build:
+      context: .
+      dockerfile: dockerfiles/dev/Dockerfile
     env_file:
-      - .env  
+      - ./envs/dev/.env
     container_name: backend
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
@@ -22,8 +26,7 @@ services:
       - "8000:8000"
     depends_on:
       - db
- 
-    
+
   smtp4dev:
     image: rnwood/smtp4dev:v3
     restart: always
@@ -32,10 +35,9 @@ services:
       - '25:25'
       - '143:143'
     volumes:
-        - smtp4dev-data:/smtp4dev
+      - smtp4dev-data:/smtp4dev
     environment:
       - ServerOptions__HostName=smtp4dev
 
 volumes:
   smtp4dev-data:
-  postgres_data:
