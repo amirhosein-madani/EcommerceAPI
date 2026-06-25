@@ -1,88 +1,71 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import Profile
-from django.contrib.auth import get_user_model
-from django.contrib.sessions.models import Session
+from .models import *
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from .forms import UserChangeForm, UserCreationForm
 
-User = get_user_model()
+# Register your models here.
 
 
-class CustomUserAdmin(UserAdmin):
-    """
-    Custom admin panel for user management with add and change forms plus password
-    """
+class UserAdmin(BaseUserAdmin):
+    # The forms to add and change user instances
+    form = UserChangeForm
+    add_form = UserCreationForm
 
-    model = User
-    list_display = ("id", "email", "is_superuser", "is_active", "is_verified")
-    list_filter = ("email", "is_superuser", "is_active", "is_verified")
-    searching_fields = ("email",)
-    ordering = ("email",)
+    # The fields to be used in displaying the User model.
+    # These override the definitions on the base UserAdmin
+    # that reference specific fields on auth.User.
+    list_display = ["username", "email", "phone_number", "is_admin", "is_verified"]
+    list_filter = ["username", "email", "phone_number", "is_admin"]
     fieldsets = (
+        (None, {"fields": ("username", "email", "password")}),
+        ("Personal info", {"fields": ("phone_number",)}),
         (
-            "Authentication",
-            {
-                "fields": ("email", "password"),
-            },
-        ),
-        (
-            "permissions",
+            "Permissions",
             {
                 "fields": (
+                    "is_admin",
                     "is_staff",
-                    "is_active",
                     "is_superuser",
                     "is_verified",
-                ),
+                    "groups",
+                    "user_permissions",
+                )
             },
         ),
-        (
-            "group permissions",
-            {
-                "fields": ("groups", "user_permissions", "type"),
-            },
-        ),
-        (
-            "important date",
-            {
-                "fields": ("last_login",),
-            },
-        ),
+        ("Important dates", {"fields": ("last_login",)}),
     )
-    add_fieldsets = (
+    # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
+    # overrides get_fieldsets to use this attribute when creating a user.
+    add_fieldsets = [
         (
             None,
             {
-                "classes": ("wide",),
-                "fields": (
+                "classes": ["wide"],
+                "fields": [
+                    "username",
                     "email",
+                    "phone_number",
                     "password1",
                     "password2",
+                    "is_admin",
                     "is_staff",
-                    "is_active",
                     "is_superuser",
                     "is_verified",
-                    "type",
-                ),
+                ],
             },
         ),
-    )
+    ]
+    search_fields = ("email", "username", "phone_number")
+    ordering = ("username",)
+    filter_horizontal = []
 
 
-class CustomProfileAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "first_name", "last_name", "phone_number")
-    searching_fields = ("user", "first_name", "last_name", "phone_number")
+admin.site.register(User, UserAdmin)
 
 
-admin.site.register(Profile, CustomProfileAdmin)
-admin.site.register(User, CustomUserAdmin)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ("first_name", "last_name", "date_of_birth")
+    search_fields = ("first_name", "last_name")
 
 
-class SessionAdmin(admin.ModelAdmin):
-    def _session_data(self, obj):
-        return obj.get_decoded()
-
-    list_display = ["session_key", "_session_data", "expire_date"]
-    readonly_fields = ["_session_data"]
-
-
-admin.site.register(Session, SessionAdmin)
+admin.site.register(Profile, ProfileAdmin)
