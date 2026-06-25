@@ -1,38 +1,34 @@
-asgiref==3.8.1
-certifi==2025.4.26
-charset-normalizer==3.4.1
-Django==5.2.15
-django-debug-toolbar==7.0.0
-idna==3.10
-pillow==12.2.0
+# Core
+Django
+djangorestframework
+python-decouple
+Pillow
+requests
 
-python-decouple==3.8
-requests==2.32.3
-sqlparse==0.5.3
-typing_extensions==4.13.2
-urllib3==2.3.0
-
-# third party madules
-markdown       
-django-filter  
+# API
+django-filter
 drf-spectacular
 drf-spectacular[sidecar]
 djangorestframework-simplejwt
 django-cors-headers
 
+# Database
+psycopg
+psycopg-binary
 
-# db
-psycopg==3.3.4
-psycopg-binary==3.3.4
+# Development
+django-debug-toolbar
 
-# refactoring and tests
+# Formatting & Linting
 black
 flake8
+
+# Testing
 pytest
 pytest-django
 faker
 
-# background process and cache
+# Background Tasks & Cache
 # celery
 # redis
 # django-celery-beat
