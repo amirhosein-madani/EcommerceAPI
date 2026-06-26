@@ -6,21 +6,41 @@ from django.contrib.auth.models import (
 )
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from .validators import (
+    phone_validator,
+    username_validator,
+    national_code_validator,
+)
 
-# post_save   post_delete pre_save pre_delete
 
-
+# post_save   post_delete pre_save pre_delete4
 class UserManager(BaseUserManager):
-    def create_user(self, email, username, phone_number, password=None):
+    def create_user(
+        self,
+        email,
+        username,
+        phone_number,
+        national_code,
+        password=None,
+    ):
         """
-        Creates and saves a User with the given email, date of
-        birth and password.
+        Creates and saves a regular user.
         """
+
+        if not username:
+            raise ValueError("Users must have a username.")
+
+        if not phone_number:
+            raise ValueError("Users must have a phone number.")
+
+        if not national_code:
+            raise ValueError("Users must have a national code.")
 
         user = self.model(
             email=self.normalize_email(email),
             username=username,
             phone_number=phone_number,
+            national_code=national_code,
         )
 
         user.set_password(password)
@@ -29,18 +49,24 @@ class UserManager(BaseUserManager):
 
     def create_superuser(
         self,
-        password,
         username,
         phone_number,
+        national_code,
+        password,
         email=None,
     ):
         """
-        Creates and saves a superuser with the given email, date of
-        birth and password.
+        Creates and saves a superuser.
         """
+
         user = self.create_user(
-            email=email, password=password, username=username, phone_number=phone_number
+            email=email,
+            username=username,
+            phone_number=phone_number,
+            national_code=national_code,
+            password=password,
         )
+
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
@@ -61,23 +87,30 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True,
         unique=True,
     )
-    username = models.CharField(max_length=50, unique=True)
-
+    username = models.CharField(
+        max_length=50, unique=True, validators=[username_validator]
+    )
+    national_code = models.CharField(
+        max_length=10,
+        unique=True,
+        validators=[national_code_validator],
+    )
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
     phone_number = models.CharField(
-        max_length=12,
+        max_length=13,
         unique=True,
+        validators=[phone_validator],
     )
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
     objects = UserManager()
 
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email", "phone_number"]
+    REQUIRED_FIELDS = ["email", "phone_number", "national_code"]
 
     def __str__(self):
         return self.username
