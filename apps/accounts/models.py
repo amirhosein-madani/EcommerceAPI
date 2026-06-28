@@ -4,12 +4,13 @@ from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
 )
+from django.core.validators import MinLengthValidator
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .validators import (
     phone_validator,
     username_validator,
-    national_code_validator,
+    validate_national_code,
 )
 
 
@@ -88,12 +89,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True,
     )
     username = models.CharField(
-        max_length=50, unique=True, validators=[username_validator]
+        max_length=8,
+        unique=True,
+        validators=[username_validator, MinLengthValidator(4)],
     )
     national_code = models.CharField(
         max_length=10,
         unique=True,
-        validators=[national_code_validator],
+        validators=[validate_national_code],
     )
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
