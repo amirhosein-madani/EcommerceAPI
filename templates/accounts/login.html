@@ -12,15 +12,26 @@
         <!-- End Heading -->
 
         <!-- Form -->
-        <form action="{% url 'accounts:login' %}" method="POST">
+        <form action="{% url 'login' %}" method="POST">
             {% csrf_token %}
             <!-- Form -->
-            <div class="mb-4">
-                <label class="form-label" for="signupSimpleLoginEmail">ایمیل شما</label>
-                <input type="email" class="form-control form-control-lg text-center" name="username"
-                    id="signupSimpleLoginEmail" placeholder="email@site.com" aria-label="email@site.com" required>
-                <span class="invalid-feedback">لطفا یک آدرس ایمیل معتبر وارد کنید.</span>
-            </div>
+         <div class="mb-4">
+            <label class="form-label" for="id_username">نام کاربری</label>
+
+            <input
+                type="text"
+                class="form-control form-control-lg text-center"
+                name="username"
+                id="id_username"
+                placeholder="نام کاربری"
+                autocomplete="username"
+                required
+            >
+
+            <span class="invalid-feedback">
+                لطفاً نام کاربری خود را وارد کنید.
+            </span>
+        </div>
             <!-- End Form -->
 
             <!-- Form -->

@@ -29,7 +29,7 @@ class UserAdmin(BaseUserAdmin):
             "Permissions",
             {
                 "fields": (
-                    "is_admin",
+                    "user_type",
                     "is_staff",
                     "is_superuser",
                     "is_verified",
@@ -54,6 +54,7 @@ class UserAdmin(BaseUserAdmin):
                     "password1",
                     "password2",
                     "national_code",
+                    "user_type",
                     "is_staff",
                     "is_superuser",
                     "is_verified",
@@ -70,7 +71,7 @@ admin.site.register(User, UserAdmin)
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("first_name", "last_name", "date_of_birth")
+    list_display = ("id", "first_name", "last_name", "date_of_birth")
     search_fields = ("first_name", "last_name")
 
 

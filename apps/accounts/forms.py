@@ -1,6 +1,8 @@
 from django import forms
 from .models import User
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import AuthenticationForm as DjangoAuthenticationForm
+from django.core.exceptions import ValidationError
 
 
 class UserCreationForm(forms.ModelForm):
@@ -68,3 +70,11 @@ class LoginForm(forms.Form):
             }
         )
     )
+
+
+class AuthenticationForm(DjangoAuthenticationForm):
+    def confirm_login_allowed(self, user):
+        super().confirm_login_allowed(user)
+
+        if not user.is_verified:
+            raise ValidationError("User is not verified.")
