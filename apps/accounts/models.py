@@ -4,6 +4,7 @@ from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
 )
+from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinLengthValidator
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -13,12 +14,18 @@ from .validators import (
     validate_national_code,
 )
 
-
 # post_save   post_delete pre_save pre_delete4
+
+
+class UserType(models.IntegerChoices):
+    CUSTOMER = 1, _("Customer")
+    ADMIN = 2, _("Admin")
+    SUPERUSER = 3, _("Superuser")
+
+
 class UserManager(BaseUserManager):
     def create_user(
         self,
-        email,
         username,
         phone_number,
         national_code,
@@ -38,7 +45,6 @@ class UserManager(BaseUserManager):
             raise ValueError("Users must have a national code.")
 
         user = self.model(
-            email=self.normalize_email(email),
             username=username,
             phone_number=phone_number,
             national_code=national_code,
@@ -54,14 +60,12 @@ class UserManager(BaseUserManager):
         phone_number,
         national_code,
         password,
-        email=None,
     ):
         """
         Creates and saves a superuser.
         """
 
         user = self.create_user(
-            email=email,
             username=username,
             phone_number=phone_number,
             national_code=national_code,
@@ -72,6 +76,7 @@ class UserManager(BaseUserManager):
         user.is_staff = True
         user.is_superuser = True
         user.is_verified = True
+        user.user_type = UserType.SUPERUSER
         user.save(using=self._db)
         return user
 
@@ -98,6 +103,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True,
         validators=[validate_national_code],
     )
+    user_type = models.IntegerField(choices=UserType, default=UserType.CUSTOMER)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
@@ -113,20 +119,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email", "phone_number", "national_code"]
+    REQUIRED_FIELDS = ["phone_number", "national_code"]
 
     def __str__(self):
         return self.username
-
-    def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
-        # Simplest possible answer: Yes, always
-        return True
-
-    def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
-        # Simplest possible answer: Yes, always
-        return True
 
 
 class Profile(models.Model):
