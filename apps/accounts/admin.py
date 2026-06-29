@@ -18,11 +18,10 @@ class UserAdmin(BaseUserAdmin):
         "username",
         "email",
         "phone_number",
-        "is_admin",
         "is_verified",
-        "national_code",
+        "user_type",
     ]
-    list_filter = ["username", "email", "phone_number", "is_admin"]
+    list_filter = ["username", "email", "phone_number", "user_type"]
     fieldsets = (
         (None, {"fields": ("username", "email", "password")}),
         ("Personal info", {"fields": ("phone_number", "national_code")}),
@@ -55,7 +54,6 @@ class UserAdmin(BaseUserAdmin):
                     "password1",
                     "password2",
                     "national_code",
-                    "is_admin",
                     "is_staff",
                     "is_superuser",
                     "is_verified",

@@ -45,7 +45,6 @@ class UserChangeForm(forms.ModelForm):
             "phone_number",
             "password",
             "is_active",
-            "is_admin",
             "is_staff",
             "is_superuser",
             "is_verified",

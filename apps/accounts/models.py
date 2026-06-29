@@ -72,7 +72,6 @@ class UserManager(BaseUserManager):
             password=password,
         )
 
-        user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
         user.is_verified = True
@@ -105,7 +104,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     user_type = models.IntegerField(choices=UserType, default=UserType.CUSTOMER)
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
