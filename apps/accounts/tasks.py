@@ -3,14 +3,16 @@ from templated_email import send_templated_mail
 
 
 @shared_task
-def send_reset_password_email(email, reset_link, username):
+def send_reset_password_email(email, username, uid, token):
     send_templated_mail(
         template_name="reset-password",
         from_email="noreply@example.com",
         recipient_list=[email],
         context={
             "username": username,
-            "reset_link": reset_link,
+            "uidb64": uid,
+            "token": token,
             "site_name": "My Shop",
+            "domain": "http://localhost:8000",
         },
     )

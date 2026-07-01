@@ -60,17 +60,7 @@ class PasswordResetRequestView(FormView):
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-            reset_link = self.request.build_absolute_uri(
-                reverse(
-                    "reset_password_confirm",
-                    kwargs={
-                        "uidb64": uid,
-                        "token": token,
-                    },
-                )
-            )
-
-            send_reset_password_email.delay(user.email, reset_link, user.username)
+            send_reset_password_email.delay(user.email, user.username, uid, token)
 
         cache.set(
             cache_key,
@@ -111,6 +101,10 @@ class ResetPasswordView(FormView):
 
     def form_valid(self, form):
         password = form.cleaned_data["password"]
+
+        if self.user.check_password(password):
+            messages.warning(self.request, "رمز عبور جدبد همان رمز عبور قدیمی است ")
+            return self.form_invalid(form)
 
         self.user.set_password(password)
         self.user.save(update_fields=["password"])
