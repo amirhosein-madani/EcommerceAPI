@@ -17,11 +17,10 @@ class UserAdmin(BaseUserAdmin):
     list_display = [
         "username",
         "email",
-        "phone_number",
         "is_verified",
         "user_type",
     ]
-    list_filter = ["username", "email", "phone_number", "user_type"]
+    list_filter = ["username", "email", "user_type"]
     fieldsets = (
         (None, {"fields": ("username", "email", "password")}),
         ("Personal info", {"fields": ("phone_number", "national_code")}),
@@ -50,7 +49,6 @@ class UserAdmin(BaseUserAdmin):
                 "fields": [
                     "username",
                     "email",
-                    "phone_number",
                     "password1",
                     "password2",
                     "national_code",
@@ -62,7 +60,7 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     ]
-    search_fields = ("email", "username", "phone_number")
+    search_fields = ("email", "username")
     ordering = ("username",)
     filter_horizontal = []
 
@@ -71,8 +69,8 @@ admin.site.register(User, UserAdmin)
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("id", "first_name", "last_name", "date_of_birth")
-    search_fields = ("first_name", "last_name")
+    list_display = ("id", "first_name", "last_name", "phone_number")
+    search_fields = ("first_name", "last_name", "phone_number")
 
 
 admin.site.register(Profile, ProfileAdmin)
