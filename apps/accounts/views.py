@@ -14,13 +14,22 @@ from .forms import PasswordResetRequestForm
 from .tasks import send_reset_password_email
 
 User = get_user_model()
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+from django.contrib import messages
 
 
 class LoginView(auth_views.LoginView):
     template_name = "accounts/login.html"
     form_class = AuthenticationForm
     redirect_authenticated_user = True
-
+    
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            f"🎉 خوش آمدید {form.get_user().username}، ورود شما با موفقیت انجام شد.",
+        )
+        return super().form_valid(form)
 
 def user_logout(request):
     logout(request)
@@ -72,3 +81,6 @@ class PasswordResetRequestView(FormView):
         )
 
         return super().form_valid(form)
+
+
+

@@ -1,47 +1,112 @@
 {% if messages %}
     {% for message in messages %}
-      <script>
-        Toastify({
-            text:`{{ message|safe }}`,
-            className: `{{ message.tags }}`,
-            style: {
-              background: "blue",
-            }
-          }).showToast();
-      </script>
-    {% endfor %}
-  {% endif %}
+        <script>
+            (() => {
+                const type = "{{ message.tags }}";
 
-  {% if form.errors %}
-    <div class="alert alert-error">
-      <ul>
-        {% for field in form %}
-          {% if field.errors %}
-            {% for error in field.errors %}
-              
-              <script>
+                const colors = {
+                    success: "#22c55e",
+                    error: "#ef4444",
+                    warning: "#f59e0b",
+                    info: "#3b82f6",
+                };
+
+                const icons = {
+                    success: "✅",
+                    error: "❌",
+                    warning: "⚠️",
+                    info: "ℹ️",
+                };
+
                 Toastify({
-                    text:`{{ error|escape }}`,
-                    className: `error`,
+                    text: `${icons[type] || "🔔"} {{ message|escapejs }}`,
+                    duration: 4000,
+                    gravity: "top",
+                    position: "right",
+                    close: true,
+                    stopOnFocus: true,
+                    offset: {
+                        x: 20,
+                        y: 20,
+                    },
                     style: {
-                      background: "red",
+                        background: "#ffffff",
+                        color: "#111827",
+                        border: "1px solid #e5e7eb",
+                        borderLeft: `5px solid ${colors[type] || "#3b82f6"}`,
+                        borderRadius: "14px",
+                        padding: "14px 18px",
+                        boxShadow: "0 12px 30px rgba(0,0,0,.15)",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        minWidth: "340px",
                     }
-                  }).showToast();
-              </script>
-            {% endfor %}
-          {% endif %}
+                }).showToast();
+            })();
+        </script>
+    {% endfor %}
+{% endif %}
+
+{% if form.errors %}
+
+    {% for field in form %}
+        {% for error in field.errors %}
+            <script>
+                Toastify({
+                    text: `❌ {{ error|escapejs }}`,
+                    duration: 4000,
+                    gravity: "top",
+                    position: "right",
+                    close: true,
+                    stopOnFocus: true,
+                    offset: {
+                        x: 20,
+                        y: 20,
+                    },
+                    style: {
+                        background: "#ffffff",
+                        color: "#111827",
+                        border: "1px solid #e5e7eb",
+                        borderLeft: "5px solid #ef4444",
+                        borderRadius: "14px",
+                        padding: "14px 18px",
+                        boxShadow: "0 12px 30px rgba(0,0,0,.15)",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        minWidth: "340px",
+                    }
+                }).showToast();
+            </script>
         {% endfor %}
-      </ul>
-      {% if form.non_field_errors %}
+    {% endfor %}
+
+    {% for error in form.non_field_errors %}
         <script>
             Toastify({
-                text:`{{ form.non_field_errors.as_text }}`,
-                className: `error`,
+                text: `❌ {{ error|escapejs }}`,
+                duration: 4000,
+                gravity: "top",
+                position: "right",
+                close: true,
+                stopOnFocus: true,
+                offset: {
+                    x: 20,
+                    y: 20,
+                },
                 style: {
-                  background: "red",
+                    background: "#ffffff",
+                    color: "#111827",
+                    border: "1px solid #e5e7eb",
+                    borderLeft: "5px solid #ef4444",
+                    borderRadius: "14px",
+                    padding: "14px 18px",
+                    boxShadow: "0 12px 30px rgba(0,0,0,.15)",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    minWidth: "340px",
                 }
-              }).showToast();
-          </script>
-      {% endif %}
-    </div>
-  {% endif %}
+            }).showToast();
+        </script>
+    {% endfor %}
+
+{% endif %}
