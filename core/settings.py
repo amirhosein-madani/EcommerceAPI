@@ -174,6 +174,9 @@ EMAIL_PORT = config("EMAIL_PORT", cast=int, default=25)
 EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 
+TEMPLATED_EMAIL_BACKEND = "templated_email.backends.vanilla_django.TemplateBackend"
+TEMPLATED_EMAIL_TEMPLATE_DIR = "email/"
+
 # -----------------------------------------------------------------------------
 # Debug Toolbar
 # -----------------------------------------------------------------------------
@@ -230,6 +233,11 @@ LOGGING = {
     "disable_existing_loggers": False,
 }
 
+# -----------------------------------------------------------------------------
+# password reset token
+# -----------------------------------------------------------------------------
+
+PASSWORD_RESET_TIMEOUT = 60 * 60
 
 # -----------------------------------------------------------------------------
 # Celery Configuration

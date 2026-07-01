@@ -3,6 +3,8 @@ from .models import User
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.forms import AuthenticationForm as DjangoAuthenticationForm
 from django.core.exceptions import ValidationError
+from django.core import exceptions
+from django.contrib.auth.password_validation import validate_password
 
 
 class UserCreationForm(forms.ModelForm):
@@ -82,3 +84,43 @@ class AuthenticationForm(DjangoAuthenticationForm):
 
 class PasswordResetRequestForm(forms.Form):
     email = forms.EmailField()
+
+
+class ResetPasswordForm(forms.Form):
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "Password",
+                "class": "form-control",
+                "id": "password-field",
+            }
+        )
+    )
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "confirm password",
+                "class": "form-control",
+                "id": "-password-field",
+            }
+        )
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if not password or not confirm_password:
+            return cleaned_data
+
+        if password != confirm_password:
+            self.add_error("confirm_password", "رمز عبور و تکرار آن یکسان نیستند.")
+            return cleaned_data
+        try:
+            validate_password(password)
+        except exceptions.ValidationError as e:
+            self.add_error("password", e)
+
+        return cleaned_data

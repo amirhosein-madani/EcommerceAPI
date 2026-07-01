@@ -1,112 +1,90 @@
+<script>
+    function translateMessage(message) {
+
+        const translations = {
+            "This field is required.": "پر کردن این فیلد الزامی است.",
+            "Enter a valid email address.": "لطفاً یک آدرس ایمیل معتبر وارد کنید.",
+            "Please enter a correct username and password. Note that both fields may be case-sensitive.": "نام کاربری یا رمز عبور وارد شده صحیح نیست.",
+            "Please enter a correct username and password.": "ایمیل یا رمز عبور وارد شده صحیح نیست.",
+            "This password is too short.": "رمز عبور بیش از حد کوتاه است.",
+            "This password is too common.": "این رمز عبور بسیار رایج است.",
+            "This password is entirely numeric.": "رمز عبور نمی‌تواند فقط شامل اعداد باشد.",
+            "The two password fields didn’t match.": "دو رمز عبور وارد شده یکسان نیستند.",
+            "This password is too short. It must contain at least 8 characters.":  "رمز عبور باید حداقل ۸ کاراکتر باشد.",
+
+        };
+
+        return translations[message] || message;
+    }
+
+    function showToast(message, type = "info") {
+
+        const colors = {
+            success: "#22c55e",
+            error: "#ef4444",
+            warning: "#f59e0b",
+            info: "#3b82f6",
+        };
+
+        const icons = {
+            success: "✅",
+            error: "❌",
+            warning: "⚠️",
+            info: "ℹ️",
+        };
+
+        Toastify({
+            text: `${icons[type] || "🔔"} ${translateMessage(message)}`,
+            duration: 4000,
+            gravity: "top",
+            position: "right",
+            close: true,
+            stopOnFocus: true,
+            offset: {
+                x: 20,
+                y: 20,
+            },
+            style: {
+                direction: "rtl",
+                textAlign: "right",
+                background: "#ffffff",
+                color: "#111827",
+                border: "1px solid #e5e7eb",
+                borderRight: `5px solid ${colors[type] || "#3b82f6"}`,
+                borderRadius: "14px",
+                padding: "14px 18px",
+                boxShadow: "0 12px 30px rgba(0,0,0,.15)",
+                fontSize: "14px",
+                fontWeight: "500",
+                minWidth: "340px",
+            }
+        }).showToast();
+    }
+</script>
+
 {% if messages %}
     {% for message in messages %}
         <script>
-            (() => {
-                const type = "{{ message.tags }}";
-
-                const colors = {
-                    success: "#22c55e",
-                    error: "#ef4444",
-                    warning: "#f59e0b",
-                    info: "#3b82f6",
-                };
-
-                const icons = {
-                    success: "✅",
-                    error: "❌",
-                    warning: "⚠️",
-                    info: "ℹ️",
-                };
-
-                Toastify({
-                    text: `${icons[type] || "🔔"} {{ message|escapejs }}`,
-                    duration: 4000,
-                    gravity: "top",
-                    position: "right",
-                    close: true,
-                    stopOnFocus: true,
-                    offset: {
-                        x: 20,
-                        y: 20,
-                    },
-                    style: {
-                        background: "#ffffff",
-                        color: "#111827",
-                        border: "1px solid #e5e7eb",
-                        borderLeft: `5px solid ${colors[type] || "#3b82f6"}`,
-                        borderRadius: "14px",
-                        padding: "14px 18px",
-                        boxShadow: "0 12px 30px rgba(0,0,0,.15)",
-                        fontSize: "14px",
-                        fontWeight: "500",
-                        minWidth: "340px",
-                    }
-                }).showToast();
-            })();
+            showToast(
+                "{{ message|escapejs }}",
+                "{{ message.tags|default:'info' }}"
+            );
         </script>
     {% endfor %}
 {% endif %}
 
 {% if form.errors %}
-
     {% for field in form %}
         {% for error in field.errors %}
             <script>
-                Toastify({
-                    text: `❌ {{ error|escapejs }}`,
-                    duration: 4000,
-                    gravity: "top",
-                    position: "right",
-                    close: true,
-                    stopOnFocus: true,
-                    offset: {
-                        x: 20,
-                        y: 20,
-                    },
-                    style: {
-                        background: "#ffffff",
-                        color: "#111827",
-                        border: "1px solid #e5e7eb",
-                        borderLeft: "5px solid #ef4444",
-                        borderRadius: "14px",
-                        padding: "14px 18px",
-                        boxShadow: "0 12px 30px rgba(0,0,0,.15)",
-                        fontSize: "14px",
-                        fontWeight: "500",
-                        minWidth: "340px",
-                    }
-                }).showToast();
+                showToast("{{ error|escapejs }}", "error");
             </script>
         {% endfor %}
     {% endfor %}
 
     {% for error in form.non_field_errors %}
         <script>
-            Toastify({
-                text: `❌ {{ error|escapejs }}`,
-                duration: 4000,
-                gravity: "top",
-                position: "right",
-                close: true,
-                stopOnFocus: true,
-                offset: {
-                    x: 20,
-                    y: 20,
-                },
-                style: {
-                    background: "#ffffff",
-                    color: "#111827",
-                    border: "1px solid #e5e7eb",
-                    borderLeft: "5px solid #ef4444",
-                    borderRadius: "14px",
-                    padding: "14px 18px",
-                    boxShadow: "0 12px 30px rgba(0,0,0,.15)",
-                    fontSize: "14px",
-                    fontWeight: "500",
-                    minWidth: "340px",
-                }
-            }).showToast();
+            showToast("{{ error|escapejs }}", "error");
         </script>
     {% endfor %}
-
 {% endif %}
