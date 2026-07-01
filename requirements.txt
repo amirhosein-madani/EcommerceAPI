@@ -4,6 +4,7 @@ djangorestframework
 python-decouple
 Pillow==12.2.0
 requests==2.32.3
+django-templated-email
 
 # API
 django-filter
@@ -29,8 +30,8 @@ pytest-django
 Faker
 
 # Background Tasks & Cache
-# celery
-# redis
-# django-celery-beat
-# django-celery-results
-# django-redis
+celery
+redis
+django-celery-beat
+django-celery-results
+django-redis

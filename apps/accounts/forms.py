@@ -78,3 +78,7 @@ class AuthenticationForm(DjangoAuthenticationForm):
 
         if not user.is_verified:
             raise ValidationError("User is not verified.")
+
+
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField()

@@ -1,18 +1,17 @@
 from celery import shared_task
 from time import sleep
+from templated_email import send_templated_mail
 
 
 @shared_task
-def send_email():
-    sleep(3)
-    return "📧 Email sent successfully"
-
-
-@shared_task
-def cleanup_old_task_results():
-
-    from django_celery_results.models import TaskResult
-
-    deleted_count, _ = TaskResult.objects.filter(status="SUCCESS").delete()
-
-    return f"{deleted_count} successful tasks cleaned up"
+def send_reset_password_email(email, reset_link, username):
+    send_templated_mail(
+        template_name="reset-password",
+        from_email="noreply@example.com",
+        recipient_list=[email],
+        context={
+            "username": username,
+            "reset_link": reset_link,
+            "site_name": "My Shop",
+        },
+    )
