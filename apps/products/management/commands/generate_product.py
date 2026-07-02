@@ -28,9 +28,7 @@ class Command(BaseCommand):
         image_list = list(image_dir.glob("*.jpg"))
 
         if not image_list:
-            self.stdout.write(
-                self.style.ERROR(f"No images found in {image_dir}")
-            )
+            self.stdout.write(self.style.ERROR(f"No images found in {image_dir}"))
             return
 
         for _ in range(10):
@@ -53,6 +51,4 @@ class Command(BaseCommand):
 
             product.category.add(choice(categories))
 
-        self.stdout.write(
-            self.style.SUCCESS("Successfully generated 10 products.")
-        )
+        self.stdout.write(self.style.SUCCESS("Successfully generated 10 products."))

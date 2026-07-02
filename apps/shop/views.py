@@ -1,14 +1,15 @@
-from django.views.generic import (
-    TemplateView,
-    ListView,
-    DetailView,
-    View
+from django.views.generic import TemplateView, ListView, DetailView, View
+from .models import (
+    ProductModel,
+    ProductStatusType,
+    ProductCategoryModel,
+    WishlistProductModel,
 )
-from .models import ProductModel, ProductStatusType, ProductCategoryModel, WishlistProductModel
 from django.core.exceptions import FieldError
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-from review.models import ReviewModel,ReviewStatusType
+from review.models import ReviewModel, ReviewStatusType
+
 # Create your views here.
 
 
@@ -17,11 +18,10 @@ class ShopProductGridView(ListView):
     paginate_by = 9
 
     def get_paginate_by(self, queryset):
-        return self.request.GET.get('page_size', self.paginate_by)
+        return self.request.GET.get("page_size", self.paginate_by)
 
     def get_queryset(self):
-        queryset = ProductModel.objects.filter(
-            status=ProductStatusType.publish.value)
+        queryset = ProductModel.objects.filter(status=ProductStatusType.publish.value)
         if search_q := self.request.GET.get("q"):
             queryset = queryset.filter(title__icontains=search_q)
         if category_id := self.request.GET.get("category_id"):
@@ -40,31 +40,45 @@ class ShopProductGridView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["total_items"] = self.get_queryset().count()
-        context["wishlist_items"] = WishlistProductModel.objects.filter(user=self.request.user).values_list(
-            "product__id", flat=True) if self.request.user.is_authenticated else []
+        context["wishlist_items"] = (
+            WishlistProductModel.objects.filter(user=self.request.user).values_list(
+                "product__id", flat=True
+            )
+            if self.request.user.is_authenticated
+            else []
+        )
         context["categories"] = ProductCategoryModel.objects.all()
         return context
 
 
 class ShopProductDetailView(DetailView):
     template_name = "shop/product-detail.html"
-    queryset = ProductModel.objects.filter(
-        status=ProductStatusType.publish.value)
+    queryset = ProductModel.objects.filter(status=ProductStatusType.publish.value)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = self.get_object()
-        context["is_wished"] = WishlistProductModel.objects.filter(
-            user=self.request.user, product__id=product.id).exists() if self.request.user.is_authenticated else False
-        reviews = ReviewModel.objects.filter(product=product,status=ReviewStatusType.accepted.value)
+        context["is_wished"] = (
+            WishlistProductModel.objects.filter(
+                user=self.request.user, product__id=product.id
+            ).exists()
+            if self.request.user.is_authenticated
+            else False
+        )
+        reviews = ReviewModel.objects.filter(
+            product=product, status=ReviewStatusType.accepted.value
+        )
         context["reviews"] = reviews
-        total_reviews_count =reviews.count()
+        total_reviews_count = reviews.count()
         context["reviews_count"] = {
             f"rate_{rate}": reviews.filter(rate=rate).count() for rate in range(1, 6)
         }
         if total_reviews_count != 0:
             context["reviews_avg"] = {
-                f"rate_{rate}": round((reviews.filter(rate=rate).count()/total_reviews_count)*100,2) for rate in range(1, 6)
+                f"rate_{rate}": round(
+                    (reviews.filter(rate=rate).count() / total_reviews_count) * 100, 2
+                )
+                for rate in range(1, 6)
             }
         else:
             context["reviews_avg"] = {f"rate_{rate}": 0 for rate in range(1, 6)}
@@ -75,6 +89,7 @@ class ShopProductDetailView(DetailView):
         obj.product_images.prefetch_related()
         return obj
 
+
 class AddOrRemoveWishlistView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
@@ -83,12 +98,14 @@ class AddOrRemoveWishlistView(LoginRequiredMixin, View):
         if product_id:
             try:
                 wishlist_item = WishlistProductModel.objects.get(
-                    user=request.user, product__id=product_id)
+                    user=request.user, product__id=product_id
+                )
                 wishlist_item.delete()
                 message = "محصول از لیست علایق حذف شد"
             except WishlistProductModel.DoesNotExist:
                 WishlistProductModel.objects.create(
-                    user=request.user, product_id=product_id)
+                    user=request.user, product_id=product_id
+                )
                 message = "محصول به لیست علایق اضافه شد"
 
         return JsonResponse({"message": message})

@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView, ListView, DeleteView
-from .models import Product, ProductStatusType , Category
+from .models import Product, ProductStatusType, Category
 
 # Create your views here.
 
@@ -12,5 +12,5 @@ class ProductListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.all()
+        context["total_items"] = self.get_queryset().count()
         return context
-    

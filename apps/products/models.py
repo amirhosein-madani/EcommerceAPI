@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
+from decimal import Decimal
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -59,6 +60,10 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse("product-detail", kwargs={"slug": self.slug})
+
+    def get_price(self):
+        discount_amount = self.price * (self.discount_percent / 100)
+        return round(self.price - discount_amount)
 
     class Meta:
         ordering = ["-created_at"]
