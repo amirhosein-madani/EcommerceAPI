@@ -95,7 +95,7 @@ class ResetPasswordView(FormView):
             messages.error(
                 request, "لینک بازیابی رمز عبور معتبر نیست یا منقضی شده است."
             )
-            return redirect("accounts:request_to_reset_password")
+            return redirect("request_to_reset_password")
 
         return super().dispatch(request, *args, **kwargs)
 
