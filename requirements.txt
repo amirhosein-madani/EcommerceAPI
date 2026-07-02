@@ -29,7 +29,7 @@ pytest
 pytest-django
 Faker
 
-# Background Tasks & Cache
+# Background Tasks & Cache‍
 celery
 redis
 django-celery-beat

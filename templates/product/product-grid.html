@@ -20,9 +20,6 @@
                         <li class="breadcrumb-item ps-2">
                             <a href="{% url 'website:index' %}">خانه</a>
                         </li>
-                        <li class="breadcrumb-item">
-                            <a href="{% url 'shop:product-grid' %}">فروشگاه</a>
-                        </li>
                         <li class="breadcrumb-item active" aria-current="page">محصولات</li>
                     </ol>
                 </nav>
@@ -109,7 +106,7 @@
                         <div class="d-grid">
                             <button type="submit" class="btn btn-outline-primary btn-transition mb-3">اعمال
                                 فیلتر</button>
-                            <a href="{% url 'shop:product-grid' %}"
+                            <a href="{% url 'product:product_grid' %}"
                                 class="btn btn-outline-danger btn-transition mb-3">حذف فیلتر ها</a>
                         </div>
                     </form>
@@ -155,7 +152,7 @@
                         <!-- Nav -->
                         <ul class="nav nav-segment">
                             <li class="nav-item">
-                                <a class="nav-link active" href="{% url 'shop:product-grid' %}">
+                                <a class="nav-link active" href="{% url 'product:product_grid' %}">
                                     <i class="bi-grid-fill"></i>
                                 </a>
                             </li>
@@ -203,7 +200,7 @@
 
                             <h4 class="card-title">
                                 <a class="text-dark"
-                                    href="{% url 'shop:product-detail' slug=object.slug %}">{{object.title}}</a>
+                                    href="#">{{object.title}}</a>
                             </h4>
                             {% if object.is_discounted %}
                             <p class="card-text text-dark fs-4">
@@ -308,7 +305,7 @@
                 </div>
                 <!-- End Heading -->
 
-                <form method="post" action="{% url 'website:newsletter' %}">
+                <form method="post">
                     {% csrf_token %}
                     <!-- Input Card -->
                     <div class="input-card input-card-pill input-card-sm border mb-3">
