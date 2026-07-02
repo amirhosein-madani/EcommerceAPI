@@ -71,10 +71,10 @@
                             <a class="nav-link {% if request.resolver_match.view_name  == 'shop:product-grid' %} active {% endif %}" href="product-grid.html">لیست محصولات</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.resolver_match.view_name  == 'website:about' %} active {% endif %}" href="about.html">درباره ما</a>
+                            <a class="nav-link {% if request.resolver_match.view_name  == 'website:about' %} active {% endif %}" href="{% url "website:about" %}">درباره ما</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.resolver_match.view_name  == 'website:contact' %} active {% endif %}" href="contact.html">ارتباط با ما</a>
+                            <a class="nav-link {% if request.resolver_match.view_name  == 'website:contact' %} active {% endif %}" href="{% url "website:contact" %}">ارتباط با ما</a>
                         </li>
 
 

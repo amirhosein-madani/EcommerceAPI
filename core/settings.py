@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     # Local Apps
     "website",
+    "products",
     "dashboard",
     "accounts",
     "shop",
