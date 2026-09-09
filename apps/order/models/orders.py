@@ -85,7 +85,7 @@ class Order(models.Model):
     )
 
     def __str__(self):
-        return f"Order #{self.pk}"
+        return f"سفارش {self.pk}"
 
 
 class OrderItem(models.Model):

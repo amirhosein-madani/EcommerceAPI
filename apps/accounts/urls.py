@@ -1,5 +1,13 @@
 from django.urls import path, include
 from .views import LoginView, user_logout, PasswordResetRequestView, ResetPasswordView
+from django.urls import path
+from .views import (
+    LoginView,
+    user_logout,
+    PasswordResetRequestView,
+    ResetPasswordView,
+    SignUpView,
+)
 
 urlpatterns = [
     path("login/", LoginView.as_view(), name="login"),
@@ -15,6 +23,8 @@ urlpatterns = [
         name="reset_password_confirm",
     ),
     path("api/v1/", include("accounts.api.v1.urls")),
+    path("signup/", SignUpView.as_view(), name="signup"),
+    # path("api/v1/", include("accounts.api.v1.urls")),
     # path('api/v2/' , include('djoser.urls')),
     # path('api/v2/' , include('djoser.urls.jwt')),
 ]
