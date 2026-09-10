@@ -1,6 +1,6 @@
 from django.urls import path, include
-from .views import LoginView, user_logout, PasswordResetRequestView, ResetPasswordView
-from django.urls import path
+
+
 from .views import (
     LoginView,
     user_logout,

@@ -1,10 +1,21 @@
-from rest_framework.generics import RetrieveDestroyAPIView, ListAPIView
 from rest_framework.filters import OrderingFilter
+from rest_framework.generics import (
+    ListAPIView,
+    RetrieveDestroyAPIView,
+    ListCreateAPIView,
+    RetrieveAPIView,
+)
 from django_filters.rest_framework import DjangoFilterBackend
-from .serializers import Newsletterserializer
+from order.api.v1.permissions import IsAdmin
+from .serializers import Newsletterserializer, TicketMessageSerializer, TicketSerializer
 from products.api.v1.paginations import DefaultPagination
 from website.models import Newsletter
-from order.api.v1.permissions import IsAdmin
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.filters import SearchFilter
+from website.models.tickets import Ticket, TicketMessage
+
+# from website.models.wishlists import Wishlist
+from accounts.models import UserType
 
 
 class NewsletterListApiView(ListAPIView):
@@ -23,3 +34,48 @@ class NewsletterRetrieveDestroyAPIView(RetrieveDestroyAPIView):
     queryset = Newsletter.objects.all()
     serializer_class = Newsletterserializer
     permission_classes = [IsAdmin]
+
+
+class TicketListCreateAPIView(ListCreateAPIView):
+    serializer_class = TicketSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ["status", "category", "priority"]
+    search_fields = ["subject"]
+
+    def get_queryset(self):
+        if self.request.user.user_type in [UserType.ADMIN, UserType.SUPERUSER]:
+            return Ticket.objects.all()
+        return Ticket.objects.filter(user=self.request.user)
+
+
+class TicketRetrieveDestroyAPIView(RetrieveDestroyAPIView):
+    serializer_class = TicketSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        if self.request.user.user_type in [UserType.ADMIN, UserType.SUPERUSER]:
+            return Ticket.objects.all()
+        return Ticket.objects.filter(user=self.request.user)
+
+
+class TicketMessageListCreateAPIView(ListCreateAPIView):
+    serializer_class = TicketMessageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        qs = TicketMessage.objects.all()
+        if self.request.user.user_type not in [UserType.ADMIN, UserType.SUPERUSER]:
+            qs = qs.filter(ticket__user=self.request.user)
+            return qs
+
+
+class TicketMessageRetrieveAPIView(RetrieveAPIView):
+    serializer_class = TicketMessageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        qs = TicketMessage.objects.all()
+        if self.request.user.user_type not in [UserType.ADMIN, UserType.SUPERUSER]:
+            qs = qs.filter(ticket__user=self.request.user)
+            return qs

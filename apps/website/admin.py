@@ -1,5 +1,5 @@
 from django.contrib import admin
-from website.models import Newsletter, ContactUs, Wishlist
+from website.models import Newsletter, ContactUs, Wishlist, TicketMessage, Ticket
 
 # Register your models here.
 
@@ -26,3 +26,7 @@ class WishlistAdmin(admin.ModelAdmin):
 
     def product_count(self, obj):
         return obj.products.count()
+
+
+admin.site.register(Ticket)
+admin.site.register(TicketMessage)
