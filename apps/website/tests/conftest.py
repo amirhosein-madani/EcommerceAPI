@@ -1,7 +1,8 @@
 import pytest
 from rest_framework.test import APIClient
 from accounts.models import User
-from website.models import Ticket, TicketMessage
+from website.models import Ticket, TicketMessage, Wishlist
+from products.models import ProductStatusType, Product
 
 
 @pytest.fixture
@@ -63,3 +64,27 @@ def comon_ticket_message(normal_user, comon_ticket):
         message="wnvowngoiernfgioerhuwqioerfbhwurif",
     )
     return ticket
+
+
+@pytest.fixture
+def common_product():
+    product = Product.objects.create(
+        title="test",
+        description="mwomweokfmwoiefwoief",
+        price=100000000,
+        status=ProductStatusType.PUBLISH,
+    )
+    return product
+
+
+@pytest.fixture
+def common_wishlist(db, normal_user, common_product):
+    wishlist, _ = Wishlist.objects.get_or_create(user=normal_user)
+    wishlist.products.add(common_product)
+    return wishlist
+
+
+@pytest.fixture
+def admin_wishlist(db, admin_user):
+    wishlist, _ = Wishlist.objects.get_or_create(user=admin_user)
+    return wishlist

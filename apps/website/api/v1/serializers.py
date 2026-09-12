@@ -1,11 +1,10 @@
 from rest_framework import serializers
 from website.models import Newsletter
 from website.models.tickets import Ticket, TicketMessage
-
-# from website.models.wishlists import Wishlist
+from products.models import Product, ProductStatusType
+from website.models.wishlists import Wishlist
 from accounts.models import UserType
 from order.models import Order
-from rest_framework import status
 
 
 class BaseSerializer(serializers.ModelSerializer):
@@ -101,3 +100,18 @@ class TicketSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["user"] = self.context["request"].user
         return super().create(validated_data)
+
+
+class WishListSerializer(serializers.ModelSerializer):
+
+    products = serializers.SlugRelatedField(
+        slug_field="title",
+        many=True,
+        queryset=Product.objects.filter(status=ProductStatusType.PUBLISH),
+    )
+    user = serializers.ReadOnlyField(source="user.username")
+    updated_at = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Wishlist
+        fields = ["id", "user", "products", "updated_at"]

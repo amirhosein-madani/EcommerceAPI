@@ -6,6 +6,7 @@ from .views import (
     TicketRetrieveDestroyAPIView,
     TicketMessageListCreateAPIView,
     TicketMessageRetrieveAPIView,
+    WishlistRetrieveUpdateAPIView,
 )
 
 urlpatterns = [
@@ -25,4 +26,5 @@ urlpatterns = [
         TicketMessageRetrieveAPIView.as_view(),
         name="message-detail",
     ),
+    path("wishlist/", WishlistRetrieveUpdateAPIView.as_view(), name="wishlist"),
 ]
