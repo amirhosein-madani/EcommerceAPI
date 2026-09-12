@@ -37,11 +37,37 @@ class Newsletterserializer(BaseSerializer):
         fields = ["id", "email", "absolute_url", "created_at"]
 
 
+class TicketMessageSerializer(serializers.ModelSerializer):
+    sender = serializers.ReadOnlyField(source="sender.username")
+
+    class Meta:
+        model = TicketMessage
+        fields = ["id", "ticket", "sender", "message", "is_staff_reply", "created_at"]
+        read_only_fields = ["sender", "is_staff_reply", "created_at"]
+
+    def validate_ticket(self, value):
+        request = self.context["request"]
+        is_staff = request.user.user_type in [UserType.ADMIN, UserType.SUPERUSER]
+        if not is_staff and value.user_id != request.user.id:
+            raise serializers.ValidationError("this ticket does not exsit.")
+        return value
+
+    def create(self, validated_data):
+        request = self.context["request"]
+        validated_data["sender"] = request.user
+        validated_data["is_staff_reply"] = request.user.user_type in [
+            UserType.ADMIN,
+            UserType.SUPERUSER,
+        ]
+        return super().create(validated_data)
+
+
 class TicketSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.username")
     order = serializers.PrimaryKeyRelatedField(
-        queryset=Order.objects.all(), required=False
+        queryset=Order.objects.all(), required=False, allow_null=True
     )
+    messages = TicketMessageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Ticket
@@ -56,49 +82,22 @@ class TicketSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             "closed_at",
+            "messages",
         ]
         read_only_fields = [
             "status",
             "created_at",
             "updated_at",
             "closed_at",
+            "messages",
         ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         request = self.context.get("request")
-
         if request and request.user.is_authenticated:
             self.fields["order"].queryset = Order.objects.filter(user=request.user)
 
     def create(self, validated_data):
         validated_data["user"] = self.context["request"].user
-        return super().create(validated_data)
-
-
-class TicketMessageSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = TicketMessage
-        fields = ["id", "ticket", "sender", "message", "is_staff_reply", "created_at"]
-        read_only_fields = ["sender", "is_staff_reply", "created_at"]
-
-    def validate_ticket(self, value):
-        request = self.context["request"]
-        is_staff = request.user.user_type in [UserType.ADMIN, UserType.SUPERUSER]
-        if not is_staff and value.user_id != request.user.id:
-            raise serializers.ValidationError(
-                "This ticket does not exist.",
-                status=status.HTTP_204_NO_CONTENT,
-            )
-        return value
-
-    def create(self, validated_data):
-        request = self.context["request"]
-        validated_data["sender"] = request.user
-        validated_data["is_staff_reply"] = request.user.user_type in [
-            UserType.ADMIN,
-            UserType.SUPERUSER,
-        ]
         return super().create(validated_data)

@@ -95,7 +95,7 @@ class TestUserAddressApi:
     def test_user_address_create_response_400_status(self, api_client, normal_user):
         api_client.force_authenticate(user=normal_user)
         url = reverse("order:address-list")
-        data = {}
+        data = {"pwrkmgoiwrjmgoiwrng": "ergmeirgjiowrjgiwrg"}
         response = api_client.post(url, data)
         assert response.status_code == 400
 
@@ -156,7 +156,7 @@ class TestUserAddressApi:
     ):
         api_client.force_authenticate(user=normal_user)
         url = reverse("order:address-detail", kwargs={"pk": normal_user_address.pk})
-        data = {}
+        data = {"pwrkmgoiwrjmgoiwrng": "ergmeirgjiowrjgiwrg"}
         response = api_client.put(url, data)
         assert response.status_code == 400
 
